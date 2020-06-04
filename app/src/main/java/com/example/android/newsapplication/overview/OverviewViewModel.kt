@@ -21,6 +21,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android.newsapplication.network.NewsApi
+import com.example.android.newsapplication.network.NewsArticles
+import com.example.android.newsapplication.network.NewsProperty
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,13 +46,14 @@ class OverviewViewModel : ViewModel() {
 
     private fun getNewsValues() {
 //        _response.value = "Set the News API Response here!"
+        println("Inside get service #@^%@@%#%^@^#@^%")
         NewsApi.retrofitService.getProperties().enqueue(
-            object: Callback<String> {
+            object: Callback<NewsProperty> {
                 /**
                  * Invoked when a network exception occurred talking to the server or when an unexpected
                  * exception occurred creating the request or processing the response.
                  */
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<NewsProperty>, t: Throwable) {
                     _response.value = "Failure: " + t.message
                 }
 
@@ -61,8 +64,14 @@ class OverviewViewModel : ViewModel() {
                  * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
                  * Call [Response.isSuccessful] to determine if the response indicates success.
                  */
-                override fun onResponse(call: Call<String>, response: Response<String>) {
-                    _response.value = response.body()
+                override fun onResponse(call: Call<NewsProperty>, response: Response<NewsProperty>) {
+//                    _response.value = response.body()
+
+
+                    val newsObject = response.body()?.articles;
+                    println("response%%%%%%%%% $newsObject" );
+
+                    _response.value = "Success: ${response.body()?.articles}"
                 }
             })
     }

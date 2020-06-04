@@ -1,3 +1,8 @@
 package com.example.android.newsapplication.network
 
-class NewsProperty()
+data class NewsProperty(
+    val status: String,
+    val source: String,
+    val sortBy: String,
+    val articles: List<NewsArticles>
+)
