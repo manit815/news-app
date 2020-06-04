@@ -20,6 +20,10 @@ package com.example.android.newsapplication.overview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android.newsapplication.network.NewsApi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
@@ -39,6 +43,27 @@ class OverviewViewModel : ViewModel() {
     }
 
     private fun getNewsValues() {
-        _response.value = "Set the News API Response here!"
+//        _response.value = "Set the News API Response here!"
+        NewsApi.retrofitService.getProperties().enqueue(
+            object: Callback<String> {
+                /**
+                 * Invoked when a network exception occurred talking to the server or when an unexpected
+                 * exception occurred creating the request or processing the response.
+                 */
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    _response.value = "Failure: " + t.message
+                }
+
+                /**
+                 * Invoked for a received HTTP response.
+                 *
+                 *
+                 * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
+                 * Call [Response.isSuccessful] to determine if the response indicates success.
+                 */
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    _response.value = response.body()
+                }
+            })
     }
 }
