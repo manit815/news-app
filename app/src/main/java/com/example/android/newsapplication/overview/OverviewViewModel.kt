@@ -23,6 +23,10 @@ import androidx.lifecycle.ViewModel
 import com.example.android.newsapplication.network.NewsApi
 import com.example.android.newsapplication.network.NewsArticles
 import com.example.android.newsapplication.network.NewsProperty
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,12 +43,16 @@ class OverviewViewModel : ViewModel() {
     val response: LiveData<String>
         get() = _response
 
+    private var viewModelJob = Job()
+
+    private val coroutineScope = CoroutineScope(
+            viewModelJob + Dispatchers.Main )
 
     init {
         getNewsValues()
     }
 
-    private fun getNewsValues() {
+    /**private fun getNewsValues() {
 //        _response.value = "Set the News API Response here!"
         println("Inside get service #@^%@@%#%^@^#@^%")
         NewsApi.retrofitService.getProperties().enqueue(
@@ -74,5 +82,23 @@ class OverviewViewModel : ViewModel() {
                     _response.value = "Success: ${response.body()?.articles}"
                 }
             })
+    }*/
+
+    private fun getNewsValues(){
+        coroutineScope.launch {
+            var getPropertiesDeferred = NewsApi.retrofitService.getProperties()
+            try {
+                var listResult = getPropertiesDeferred.await()
+                _response.value =
+                        "Success: ${listResult?.articles.size} News retrieved"
+            } catch (e: Exception) {
+                _response.value = "Failure: ${e.message}"
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }
