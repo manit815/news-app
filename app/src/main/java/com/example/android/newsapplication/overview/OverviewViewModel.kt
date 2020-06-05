@@ -31,17 +31,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+enum class NewsApiStatus { LOADING, ERROR, DONE }
 /**
  * The [ViewModel] that is attached to the [OverviewFragment].
  */
 class OverviewViewModel : ViewModel() {
 
     // The internal MutableLiveData String that stores the most recent response
-    private val _response = MutableLiveData<String>()
+    private val _status = MutableLiveData<NewsApiStatus>()
 
     // The external immutable LiveData for the response String
-    val response: LiveData<String>
-        get() = _response
+    val status: LiveData<NewsApiStatus>
+        get() = _status
+
+    private val _properties = MutableLiveData<List<NewsArticles>>()
+
+    val properties: LiveData<List<NewsArticles>>
+        get() = _properties
 
     private var viewModelJob = Job()
 
@@ -88,11 +94,16 @@ class OverviewViewModel : ViewModel() {
         coroutineScope.launch {
             var getPropertiesDeferred = NewsApi.retrofitService.getProperties()
             try {
+                _status.value = NewsApiStatus.LOADING
                 var listResult = getPropertiesDeferred.await()
-                _response.value =
-                        "Success: ${listResult?.articles.size} News retrieved"
+                _status.value = NewsApiStatus.DONE
+
+                if (listResult?.articles.size > 0) {
+                    _properties.value = listResult.articles
+                }
             } catch (e: Exception) {
-                _response.value = "Failure: ${e.message}"
+                _status.value = NewsApiStatus.ERROR
+                _properties.value = ArrayList()
             }
         }
     }
