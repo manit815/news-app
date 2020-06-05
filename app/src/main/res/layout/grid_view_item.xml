@@ -25,13 +25,51 @@
             name="property"
             type="com.example.android.newsapplication.network.NewsArticles" />
     </data>
-    <ImageView
-        android:id="@+id/news_image"
+<!--    <ImageView-->
+<!--        android:id="@+id/news_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="170dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:padding="2dp"-->
+<!--        tools:src="@tools:sample/backgrounds/scenic"-->
+<!--        app:imageUrl="@{property.urlToImage}"/>-->
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:padding="2dp"
-        tools:src="@tools:sample/backgrounds/scenic"
-        app:imageUrl="@{property.urlToImage}"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="120dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+
+            <ImageView
+                android:id="@+id/news_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{property.urlToImage}"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/news_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="200dp"
+                android:fontFamily="@font/rubik_mono_one"
+                tools:text="@{property.title}" />
+
+            <TextView
+                android:id="@+id/news_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="300dp"
+                android:fontFamily="sans-serif"
+                tools:text="@{property.description}" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
