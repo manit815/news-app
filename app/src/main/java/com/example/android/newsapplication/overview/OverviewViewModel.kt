@@ -27,10 +27,10 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<NewsApiStatus>
         get() = _status
 
-    private val _properties = MutableLiveData<List<NewsArticles>>()
+    private val _articles = MutableLiveData<List<NewsArticles>>()
 
-    val properties: LiveData<List<NewsArticles>>
-        get() = _properties
+    val articles: LiveData<List<NewsArticles>>
+        get() = _articles
 
     private var viewModelJob = Job()
 
@@ -47,18 +47,18 @@ class OverviewViewModel : ViewModel() {
 
     private fun getNewsValues(){
         coroutineScope.launch {
-            var getPropertiesDeferred = NewsApi.retrofitService.getProperties()
+            var getArticlesDeferred = NewsApi.retrofitService.getNews()
             try {
                 _status.value = NewsApiStatus.LOADING
-                var listResult = getPropertiesDeferred.await()
+                var listResult = getArticlesDeferred.await()
                 _status.value = NewsApiStatus.DONE
 
                 if (listResult?.articles.size > 0) {
-                    _properties.value = listResult.articles
+                    _articles.value = listResult.articles
                 }
             } catch (e: Exception) {
                 _status.value = NewsApiStatus.ERROR
-                _properties.value = ArrayList()
+                _articles.value = ArrayList()
             }
         }
     }
