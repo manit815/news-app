@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.android.newsapplication.detail.DetailViewModel" />
+    </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,33 +24,52 @@
                 android:id="@+id/main_photo_image"
                 android:layout_width="0dp"
                 android:layout_height="266dp"
+
                 android:scaleType="centerCrop"
+                app:imageUrl="@{viewModel.selectedArticles.urlToImage}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/backgrounds/scenic" />
-
             <TextView
-                android:id="@+id/property_type_text"
-                android:layout_width="wrap_content"
+                android:id="@+id/news_author"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:textColor="#de000000"
-                android:textSize="39sp"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_photo_image"
-                tools:text="To Rent" />
+                tools:text="@{viewModel.selectedArticles.author}" />
 
             <TextView
-                android:id="@+id/price_value_text"
-                android:layout_width="wrap_content"
+                android:id="@+id/news_timestamp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:textColor="#de000000"
-                android:textSize="20sp"
+                android:textSize="10sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/property_type_text"
-                tools:text="$100,000" />
+                app:layout_constraintTop_toBottomOf="@+id/news_author"
+                tools:text="@{viewModel.selectedArticles.publishedAt}" />
+
+            <TextView
+                android:id="@+id/news_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="#de000000"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/news_timestamp"
+                tools:text="@{viewModel.selectedArticles.content}" />
+
+            <TextView
+                android:id="@+id/sorry_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/news_content"
+                tools:text="@string/sorry_message" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

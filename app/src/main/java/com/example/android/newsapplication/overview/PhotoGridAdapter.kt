@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.newsapplication.databinding.GridViewItemBinding
 import com.example.android.newsapplication.network.NewsArticles
 
-class PhotoGridAdapter : ListAdapter<NewsArticles,
+class PhotoGridAdapter(private val onClickListener: OnClickListener) : ListAdapter<NewsArticles,
         PhotoGridAdapter.NewsArticlesViewHolder>(DiffCallback) {
     /**
      * Called when RecyclerView needs a new [ViewHolder] of the given type to represent
@@ -61,6 +61,9 @@ class PhotoGridAdapter : ListAdapter<NewsArticles,
      */
     override fun onBindViewHolder(holder: PhotoGridAdapter.NewsArticlesViewHolder, position: Int) {
         val newsArticles = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(newsArticles)
+        }
         holder.bind(newsArticles)
     }
 
@@ -128,5 +131,9 @@ class PhotoGridAdapter : ListAdapter<NewsArticles,
             binding.executePendingBindings()
         }
 
+    }
+
+    class OnClickListener(val clickListener: (newsArticles: NewsArticles) -> Unit) {
+        fun onClick(newsArticles: NewsArticles) = clickListener(newsArticles)
     }
 }
